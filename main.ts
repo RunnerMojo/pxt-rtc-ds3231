@@ -18,6 +18,13 @@ namespace rtc {
         return Math.floor(value / 16) * 10 + (value % 16)
     }
 
+    function leadingZeros(value: number): string {
+        if (value < 10) {
+            return "0" + value
+        }
+        return "" + value
+    }
+
     function getRegister(register: number): number {
         let buf = pins.createBuffer(1)
         buf[0] = register
@@ -25,7 +32,7 @@ namespace rtc {
         return pins.i2cReadNumber(I2C_ADDR, NumberFormat.Int8LE)
     }
 
-    export function getTime() : number[] {
+    export function getTime(): number[] {
         let hour = HexToDec(getRegister(REG_HOUR))
         let min = HexToDec(getRegister(REG_MIN))
         let sec = HexToDec(getRegister(REG_SEC))
@@ -34,7 +41,9 @@ namespace rtc {
 
     export function getTimeString(): string {
         let time = getTime()
-        // TODO: leading zeroes
-        return `${time[0]}:${time[1]}:${time[2]}`
+        let hour = leadingZeros(time[0])
+        let min = leadingZeros(time[1])
+        let sec = leadingZeros(time[2])
+        return `${hour}:${min}:${sec}`
     }
 }
