@@ -7,6 +7,10 @@ Example
 -------
 
 ```
+rtc.setTime("18:30:00")
+```
+
+```
 basic.forever(function () {
     basic.showString(rtc.getTimeString())
 })

@@ -1,7 +1,7 @@
 namespace rtc {
     const I2C_ADDR = 0x68
-    const REG_SEC = 0x00
-    const REG_MIN = 0x01
+    const REG_SECS = 0x00
+    const REG_MINS = 0x01
     const REG_HOUR = 0x02
     const REG_CTRL = 0x0E
 
@@ -14,11 +14,15 @@ namespace rtc {
 
     initialize()
 
-    function HexToDec(value: number): number {
+    function hexToDec(value: number): number {
         return Math.floor(value / 16) * 10 + (value % 16)
     }
 
-    function leadingZeros(value: number): string {
+    function decToHex(value: number): number {
+        return Math.floor(value / 10) * 16 + (value % 10)
+    }
+
+    function leadingZero(value: number): string {
         if (value < 10) {
             return "0" + value
         }
@@ -26,24 +30,42 @@ namespace rtc {
     }
 
     function getRegister(register: number): number {
-        let buf = pins.createBuffer(1)
-        buf[0] = register
-        pins.i2cWriteBuffer(I2C_ADDR, buf)
+        let data = pins.createBuffer(1)
+        data[0] = register
+        pins.i2cWriteBuffer(I2C_ADDR, data)
         return pins.i2cReadNumber(I2C_ADDR, NumberFormat.Int8LE)
     }
 
+    function setRegister(register: number, value: number) {
+        let data = pins.createBuffer(2)
+        data[0] = register
+        data[1] = value
+        pins.i2cWriteBuffer(I2C_ADDR, data)
+    }
+
+    export function setTime(input: string) {
+        let time = helpers.stringSplit(input, ":")
+        let hour = parseInt(time[0]) % 24;
+        let mins = parseInt(time[1]) % 60;
+        let secs = parseInt(time[2]) % 60;
+
+        setRegister(REG_HOUR, decToHex(hour))
+        setRegister(REG_MINS, decToHex(mins))
+        setRegister(REG_SECS, decToHex(secs))
+    }
+
     export function getTime(): number[] {
-        let hour = HexToDec(getRegister(REG_HOUR))
-        let min = HexToDec(getRegister(REG_MIN))
-        let sec = HexToDec(getRegister(REG_SEC))
-        return [hour, min, sec]
+        let hour = hexToDec(getRegister(REG_HOUR))
+        let mins = hexToDec(getRegister(REG_MINS))
+        let secs = hexToDec(getRegister(REG_SECS))
+        return [hour, mins, secs]
     }
 
     export function getTimeString(): string {
         let time = getTime()
-        let hour = leadingZeros(time[0])
-        let min = leadingZeros(time[1])
-        let sec = leadingZeros(time[2])
-        return `${hour}:${min}:${sec}`
+        let hour = leadingZero(time[0])
+        let mins = leadingZero(time[1])
+        let secs = leadingZero(time[2])
+        return `${hour}:${mins}:${secs}`
     }
 }
