@@ -1,7 +1,8 @@
-pxt-rtc-ds3231
-==============
+pxt-rtc-ds3231-date
+===================
 
 Real-time clock extension for the Micro:bit
+added in date support
 
 Example
 -------
