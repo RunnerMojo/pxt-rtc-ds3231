@@ -3,6 +3,10 @@ namespace rtc {
     const REG_SECS = 0x00
     const REG_MINS = 0x01
     const REG_HOUR = 0x02
+    const REG_DAY = 0x03
+    const REG_DATE = 0x04
+    const REG_MONTH = 0x05
+    const REG_YEAR = 0x06
     const REG_CTRL = 0x0E
 
     function initialize() {
