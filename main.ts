@@ -45,6 +45,13 @@ namespace rtc {
         let secs = bcd.Decode(getRegister(REG_SECS))
         return [hour, mins, secs]
     }
+    
+    export function getDate(): number[] {
+        let date = bcd.Decode(getRegister(REG_DATE))
+        let month = bcd.Decode(getRegister(REG_MONTH))
+        let year = bcd.Decode(getRegister(REG_YEAR))
+        return [year, month, date]
+    }
 
     export function setTime(hour: number, mins: number, secs: number) {
         setRegister(REG_HOUR, bcd.Encode(hour))
