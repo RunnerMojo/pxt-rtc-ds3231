@@ -1,7 +1,7 @@
 {
-    "name": "rtc-ds3231",
-    "version": "0.1.2",
-    "description": "Extension which provides access to the DS3231 RTC",
+    "name": "rtc-ds3231-date",
+    "version": "0.1.0",
+    "description": "Extension which provides access to the DS3231 RTC with Date",
     "license": "Apache",
     "dependencies": {
         "core": "*",
