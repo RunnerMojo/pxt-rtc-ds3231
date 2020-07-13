@@ -59,6 +59,12 @@ namespace rtc {
         setRegister(REG_SECS, bcd.Encode(secs))
     }
 
+    export function setDate(year: number, month: number, date: number) {
+        setRegister(REG_YEAR, bcd.Encode(year))
+        setRegister(REG_MONTH, bcd.Encode(month))
+        setRegister(REG_DATE, bcd.Encode(date))
+    }
+    
     export function setTimeString(input: string) {
         let time = helpers.stringSplit(input, ":")
 
